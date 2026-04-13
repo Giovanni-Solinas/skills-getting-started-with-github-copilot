@@ -1,0 +1,17 @@
+def test_get_activities_returns_all_activities(client):
+    response = client.get("/activities")
+
+    assert response.status_code == 200
+
+    payload = response.json()
+    assert isinstance(payload, dict)
+    assert "Chess Club" in payload
+    assert "participants" in payload["Chess Club"]
+
+
+def test_get_activities_sets_no_cache_headers(client):
+    response = client.get("/activities")
+
+    assert response.status_code == 200
+    assert response.headers.get("cache-control") == "no-store"
+    assert response.headers.get("pragma") == "no-cache"
